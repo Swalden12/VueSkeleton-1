@@ -35,8 +35,8 @@ function makeid(length) {
   }
   return result;
 }
-function ToggleTaskCompletion(taskId) {
-  tasks.value[taskId].Completed = !tasks.value[taskId].Completed;
+function ToggleTaskCompletion(task) {
+  task.Completed = !task.Completed;
 }
 function CreateTask(title, notes) {
   ToggleModal();
@@ -79,7 +79,7 @@ function DeleteTask(taskId){
           <h3 className="self-center font-bold text-xl">{{ item.Title }}</h3>
           <div className="flex items-center">
             <p>Status: </p>
-            <svg style="cursor: pointer; user-select: none;" v-if="item.Completed" v-on:click="ToggleTaskCompletion(key)"
+            <svg style="cursor: pointer; user-select: none;" v-if="item.Completed" v-on:click="ToggleTaskCompletion(item)"
               viewBox="0 0 24 24" height="60px" width="60px" fill="none" stroke="green"
               xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -91,8 +91,7 @@ function DeleteTask(taskId){
                 </g>
               </g>
             </svg>
-            <svg style="cursor: pointer; user-select: none;" v-else="item.Completed"
-              v-on:click="ToggleTaskCompletion(key)" viewBox="0 0 24 24" height="60px" width="60px" fill="none"
+            <svg style="cursor: pointer; user-select: none;" v-else="item.Completed" v-on:click="ToggleTaskCompletion(item)" viewBox="0 0 24 24" height="60px" width="60px" fill="none"
               stroke="red" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
