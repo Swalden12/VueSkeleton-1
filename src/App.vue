@@ -1,4 +1,3 @@
-
 <script setup>
 import { ref, watch } from 'vue';
 import "./assets/tailwind.css";
@@ -6,10 +5,10 @@ import "./assets/tailwind.css";
 var modalShown = ref(false);
 
 var tasks = ref({
-  'Example Task': {
-    Title: 'Example Task',
-    Notes: 'This is a note about this example task. You can mark it complete by pressing the red X above',
-    Completed: false
+  'exampleTask': {
+    title: 'Example Task',
+    notes: 'This is a note about this example task. You can mark it complete by pressing the red X above',
+    completed: false
   }
 });
 
@@ -24,7 +23,7 @@ watch(tasks, (newTasks) => {
   localStorage.setItem('tasks', JSON.stringify(newTasks));
 }, { deep: true });
 
-function makeid(length) {
+function makeId(length) {
   let result = '';
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
@@ -35,21 +34,21 @@ function makeid(length) {
   }
   return result;
 }
-function ToggleTaskCompletion(task) {
-  task.Completed = !task.Completed;
+function toggleTaskCompletion(task) {
+  task.completed = !task.completed;
 }
-function CreateTask(title, notes) {
-  ToggleModal();
-  tasks.value[makeid(16)] = {
-    "Title": title,
-    "Notes": notes,
-    "Completed": false
+function createTask(title, notes) {
+  toggleModal();
+  tasks.value[makeId(16)] = {
+    "title": title,
+    "notes": notes,
+    "completed": false
   };
 }
-function ToggleModal(){
+function toggleModal(){
   modalShown.value = !modalShown.value;
 }
-function DeleteTask(taskId){
+function deleteTask(taskId){
   delete tasks.value[taskId];
 }
 </script>
@@ -64,8 +63,8 @@ function DeleteTask(taskId){
         className="bold w-full border-2 p-3 rounded-md resize-none h-96"></textarea>
       <div
       className="flex justify-between mt-auto">
-        <button @click="ToggleModal()">Cancel</button>
-        <button @click='CreateTask(newTaskTitle,newTaskNotes);newTaskTitle=null;newTaskNotes=null;'>Save</button>
+        <button @click="toggleModal()">Cancel</button>
+        <button @click='createTask(newTaskTitle,newTaskNotes);newTaskTitle=null;newTaskNotes=null;'>Save</button>
       </div>
     </div>
   </div>
@@ -76,10 +75,10 @@ function DeleteTask(taskId){
     <div v-for="(item, key) in tasks">
       <div className="bg-aliceblue pt-5 p-5 w-[400px] bg-slate-100 rounded-md shadow-2xl">
         <div className="flex justify-between w-full">
-          <h3 className="self-center font-bold text-xl">{{ item.Title }}</h3>
+          <h3 className="self-center font-bold text-xl">{{ item.title }}</h3>
           <div className="flex items-center">
             <p>Status: </p>
-            <svg style="cursor: pointer; user-select: none;" v-if="item.Completed" v-on:click="ToggleTaskCompletion(item)"
+            <svg style="cursor: pointer; user-select: none;" v-if="item.completed" v-on:click="toggleTaskCompletion(item)"
               viewBox="0 0 24 24" height="60px" width="60px" fill="none" stroke="green"
               xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -91,7 +90,7 @@ function DeleteTask(taskId){
                 </g>
               </g>
             </svg>
-            <svg style="cursor: pointer; user-select: none;" v-else="item.Completed" v-on:click="ToggleTaskCompletion(item)" viewBox="0 0 24 24" height="60px" width="60px" fill="none"
+            <svg style="cursor: pointer; user-select: none;" v-else="item.completed" v-on:click="toggleTaskCompletion(item)" viewBox="0 0 24 24" height="60px" width="60px" fill="none"
               stroke="red" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -102,7 +101,7 @@ function DeleteTask(taskId){
                 </g>
               </g>
             </svg>
-            <svg style="cursor: pointer; user-select: none;" v-on:click="DeleteTask(key)" width="30px" height="30px"
+            <svg style="cursor: pointer; user-select: none;" v-on:click="deleteTask(key)" width="30px" height="30px"
               viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -116,10 +115,10 @@ function DeleteTask(taskId){
             </svg>
           </div>
         </div>
-        <p className="break-words">{{ item.Notes }}</p>
+        <p className="break-words">{{ item.notes }}</p>
       </div>
     </div>
-    <button @click="ToggleModal()"
+    <button @click="toggleModal()"
     className="border-none font-bold cursor-pointer w-[400px] bg-aliceblue rounded-10 p-10 bg-slate-50 rounded-md shadow-2xl">Add
       Task</button>
   </div>
