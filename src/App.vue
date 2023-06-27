@@ -40,9 +40,9 @@ function toggleTaskCompletion(task) {
 function createTask(title, notes) {
   toggleModal();
   tasks.value[makeId(16)] = {
-    "title": title,
-    "notes": notes,
-    "completed": false
+    title: title,
+    notes: notes,
+    completed: false
   };
 }
 function toggleModal(){
