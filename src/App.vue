@@ -1,15 +1,35 @@
-<script setup>
-import { ref } from 'vue';
+<script>
+import { ref, watch } from 'vue';
 
-const items = ref({
-  "Test ss" : {
-    Title: 'Test',
-    Notes: "This is a note about this test task. You can mark it complete by pressing the red X above",
-    Completed: false
+export default {
+  name: 'Storage',
+  setup() {
+    
+    var tasks = ref({
+      'Example': {
+        Title: 'Example Task',
+        Notes: 'This is a note about this example task. You can mark it complete by pressing the red X above',
+        Completed: false
+      }
+    });
+
+    const msg = 'Todo App';
+    
+    var tasksJson = localStorage.getItem("tasks");
+    if (tasksJson !== null){
+      tasks = ref(JSON.parse(tasksJson));
+    }
+
+    watch(tasks, (newTasks) => {
+      localStorage.setItem('tasks', JSON.stringify(newTasks));
+    }, { deep: true });
+
+    return {
+      tasks,
+      msg
+    };
   }
-})
-const msg = 'Todo App';
-
+};
 </script>
 
 <template>
@@ -17,13 +37,13 @@ const msg = 'Todo App';
     {{ msg }}
   </h1>
   <div id="tasks-todo" style="display: flex; justify-content: center;">
-    <div v-for="(item, key) in items">
+    <div v-for="(item, key) in tasks">
       <div style="width: fit-content; background-color: aliceblue; border-radius: 10px; padding: 10px; width: 400px;">
         <div style="display: flex; justify-content: space-between; width: 100%;">
           <h3>{{ item.Title }}</h3>
           <div style="display: flex; align-items: center;">
             <p>Status: </p>
-            <svg style="cursor: pointer; user-select: none;" v-if="item.Completed" v-on:click="items[key].Completed = false" viewBox="0 0 24 24" height="60px" width="60px" fill="none" stroke="green"
+            <svg style="cursor: pointer; user-select: none;" v-if="item.Completed" v-on:click="tasks[key].Completed = false" viewBox="0 0 24 24" height="60px" width="60px" fill="none" stroke="green"
             xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -34,7 +54,7 @@ const msg = 'Todo App';
               </g>
             </g>
           </svg>
-          <svg style="cursor: pointer; user-select: none;" v-else="item.Completed" v-on:click="items[key].Completed = true" viewBox="0 0 24 24" height="60px" width="60px" fill="none" stroke="red"
+          <svg style="cursor: pointer; user-select: none;" v-else="item.Completed" v-on:click="tasks[key].Completed = true" viewBox="0 0 24 24" height="60px" width="60px" fill="none" stroke="red"
             xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -45,7 +65,7 @@ const msg = 'Todo App';
               </g>
             </g>
           </svg>
-          <svg style="cursor: pointer; user-select: none;" v-on:click="delete items[key]" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg style="cursor: pointer; user-select: none;" v-on:click="delete tasks[key]" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
               <g id="SVGRepo_iconCarrier">
