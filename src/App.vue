@@ -78,7 +78,7 @@ function deleteTask(taskId){
           <h3 class="self-center font-bold text-xl">{{ item.title }}</h3>
           <div class="flex items-center">
             <p>Status: </p>
-            <svg style="cursor: pointer; user-select: none;" v-if="item.completed" v-on:click="toggleTaskCompletion(item)"
+            <svg style="cursor: pointer; user-select: none;" v-if="item.completed" @click="toggleTaskCompletion(item)"
               viewBox="0 0 24 24" height="60px" width="60px" fill="none" stroke="green"
               xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -90,7 +90,7 @@ function deleteTask(taskId){
                 </g>
               </g>
             </svg>
-            <svg style="cursor: pointer; user-select: none;" v-else v-on:click="toggleTaskCompletion(item)" viewBox="0 0 24 24" height="60px" width="60px" fill="none"
+            <svg style="cursor: pointer; user-select: none;" v-else @click="toggleTaskCompletion(item)" viewBox="0 0 24 24" height="60px" width="60px" fill="none"
               stroke="red" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -101,7 +101,7 @@ function deleteTask(taskId){
                 </g>
               </g>
             </svg>
-            <svg style="cursor: pointer; user-select: none;" v-on:click="deleteTask(key)" width="30px" height="30px"
+            <svg style="cursor: pointer; user-select: none;" @click="deleteTask(key)" width="30px" height="30px"
               viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
