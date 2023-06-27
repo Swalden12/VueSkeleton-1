@@ -1,6 +1,7 @@
 
 <script setup>
 import { ref, watch } from 'vue';
+import "./assets/tailwind.css";
 
 var modalShown = ref(false);
 
@@ -55,14 +56,14 @@ function DeleteTask(taskId){
 
 <template>
   <div v-if="modalShown" class="modal">
-    <div class="modal-content" style="width: 300px; height: 500px;">
+    <div className="modal-content">
       <input v-model="newTaskTitle" type="text" placeholder="Task Title"
-        style="font-weight: bold; width: 300px; height: 30px">
-      <br>
+      className="bold w-full h-10 border-2 p-3 rounded-md">
       <br>
       <textarea v-model="newTaskNotes" placeholder="Task Notes"
-        style="width: 300px; height: 400px; resize: none;"></textarea>
-      <div style="display: flex; justify-content: space-between;">
+        className="bold w-full border-2 p-3 rounded-md resize-none h-96"></textarea>
+      <div
+      className="flex justify-between mt-auto">
         <button @click="ToggleModal()">Cancel</button>
         <button @click='CreateTask(newTaskTitle,newTaskNotes);newTaskTitle=null;newTaskNotes=null;'>Save</button>
       </div>
@@ -71,13 +72,12 @@ function DeleteTask(taskId){
   <h1 style="text-align: center;">
     {{ msg }}
   </h1>
-  <div id="tasks-todo"
-    style="display: flex; gap: 10px; justify-content: center; flex-direction: column; width: fit-content; position: relative; left: 50%; transform: translate(-50%, 0%);">
+  <div id="tasks-todo" className="flex gap-2 p-10 flex-wrap">
     <div v-for="(item, key) in tasks">
-      <div style="width: fit-content; background-color: aliceblue; border-radius: 10px; padding: 10px; width: 400px;">
-        <div style="display: flex; justify-content: space-between; width: 100%;">
-          <h3>{{ item.Title }}</h3>
-          <div style="display: flex; align-items: center;">
+      <div className="bg-aliceblue pt-5 p-5 w-[400px] bg-slate-100 rounded-md shadow-2xl">
+        <div className="flex justify-between w-full">
+          <h3 className="self-center font-bold text-xl">{{ item.Title }}</h3>
+          <div className="flex items-center">
             <p>Status: </p>
             <svg style="cursor: pointer; user-select: none;" v-if="item.Completed" v-on:click="ToggleTaskCompletion(key)"
               viewBox="0 0 24 24" height="60px" width="60px" fill="none" stroke="green"
@@ -117,11 +117,11 @@ function DeleteTask(taskId){
             </svg>
           </div>
         </div>
-        <p style="word-wrap: break-word;">{{ item.Notes }}</p>
+        <p className="break-words">{{ item.Notes }}</p>
       </div>
     </div>
     <button @click="ToggleModal()"
-      style="border: none; font-weight: bold; cursor: pointer; width: 420px; background-color: aliceblue; border-radius: 10px; padding: 10px; margin-top: 10px;">Add
+    className="border-none font-bold cursor-pointer w-[400px] bg-aliceblue rounded-10 p-10 bg-slate-50 rounded-md shadow-2xl">Add
       Task</button>
   </div>
 </template>
