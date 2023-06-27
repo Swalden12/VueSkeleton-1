@@ -72,7 +72,7 @@ function deleteTask(taskId){
     {{ msg }}
   </h1>
   <div id="tasks-todo" class="flex gap-2 p-10 flex-wrap">
-    <div v-for="(item, key) in tasks">
+    <div v-for="(item, key) in tasks" :key="key">
       <div class="bg-aliceblue pt-5 p-5 w-[400px] bg-slate-100 rounded-md shadow-2xl">
         <div class="flex justify-between w-full">
           <h3 class="self-center font-bold text-xl">{{ item.title }}</h3>
