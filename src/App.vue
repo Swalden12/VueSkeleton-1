@@ -132,7 +132,7 @@ function makeid(length) {
       </div>
     </div>
     <button @click="modalShown = true;"
-        style="border: none; font-weight: bold; cursor: pointer; width: 400px; background-color: aliceblue; border-radius: 10px; padding: 10px; margin-top: 10px;">Add
+        style="border: none; font-weight: bold; cursor: pointer; width: 420px; background-color: aliceblue; border-radius: 10px; padding: 10px; margin-top: 10px;">Add
         Task</button>
   </div>
 </template>
