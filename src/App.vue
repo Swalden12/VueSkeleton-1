@@ -1,71 +1,121 @@
-<script>
+
+<script setup>
 import { ref, watch } from 'vue';
 
-export default {
-  name: 'Storage',
-  setup() {
-    
-    var tasks = ref({
-      'Example': {
-        Title: 'Example Task',
-        Notes: 'This is a note about this example task. You can mark it complete by pressing the red X above',
-        Completed: false
-      }
-    });
+var modalShown = ref(false);
 
-    const msg = 'Todo App';
-    
-    var tasksJson = localStorage.getItem("tasks");
-    if (tasksJson !== null){
-      tasks = ref(JSON.parse(tasksJson));
-    }
-
-    watch(tasks, (newTasks) => {
-      localStorage.setItem('tasks', JSON.stringify(newTasks));
-    }, { deep: true });
-
-    return {
-      tasks,
-      msg
-    };
+var tasks = ref({
+  'Example Task': {
+    Title: 'Example Task',
+    Notes: 'This is a note about this example task. You can mark it complete by pressing the red X above',
+    Completed: false
   }
-};
+});
+
+const msg = 'Todo App';
+
+var tasksJson = localStorage.getItem("tasks");
+if (tasksJson !== null) {
+  tasks = ref(JSON.parse(tasksJson));
+}
+
+watch(tasks, (newTasks) => {
+  localStorage.setItem('tasks', JSON.stringify(newTasks));
+}, { deep: true });
+
+function makeid(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
+
 </script>
+<style scoped>
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+}
+</style>
 
 <template>
+  <div v-if="modalShown" class="modal">
+    <div class="modal-content" style="width: 300px; height: 500px;">
+      <input v-model="newTaskTitle" type="text" placeholder="Task Title"
+        style="font-weight: bold; width: 300px; height: 30px">
+      <br>
+      <br>
+      <textarea v-model="newTaskNotes" placeholder="Task Notes"
+        style="width: 300px; height: 400px; resize: none;"></textarea>
+      <div style="display: flex; justify-content: space-between;">
+        <button @click="modalShown = false;">Cancel</button>
+        <button @click='modalShown = false; tasks[makeid(16)] = {
+          "Title": newTaskTitle,
+          "Notes": newTaskNotes,
+          "Completed": false
+        };
+        newTaskTitle = null;
+        newTaskNotes = null;
+        '>Save</button>
+      </div>
+    </div>
+  </div>
   <h1 style="text-align: center;">
     {{ msg }}
   </h1>
-  <div id="tasks-todo" style="display: flex; justify-content: center;">
+  <div id="tasks-todo"
+    style="display: flex; gap: 10px; justify-content: center; flex-direction: column; width: fit-content; position: relative; left: 50%; transform: translate(-50%, 0%);">
     <div v-for="(item, key) in tasks">
       <div style="width: fit-content; background-color: aliceblue; border-radius: 10px; padding: 10px; width: 400px;">
         <div style="display: flex; justify-content: space-between; width: 100%;">
           <h3>{{ item.Title }}</h3>
           <div style="display: flex; align-items: center;">
             <p>Status: </p>
-            <svg style="cursor: pointer; user-select: none;" v-if="item.Completed" v-on:click="tasks[key].Completed = false" viewBox="0 0 24 24" height="60px" width="60px" fill="none" stroke="green"
-            xmlns="http://www.w3.org/2000/svg">
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-            <g id="SVGRepo_iconCarrier">
-              <g id="Interface / Check">
-                <path id="Vector" d="M6 12L10.2426 16.2426L18.727 7.75732" stroke-width="2" stroke-linecap="round"
-                  stroke-linejoin="round"></path>
+            <svg style="cursor: pointer; user-select: none;" v-if="item.Completed"
+              v-on:click="tasks[key].Completed = false" viewBox="0 0 24 24" height="60px" width="60px" fill="none"
+              stroke="green" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <g id="Interface / Check">
+                  <path id="Vector" d="M6 12L10.2426 16.2426L18.727 7.75732" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+                </g>
               </g>
-            </g>
-          </svg>
-          <svg style="cursor: pointer; user-select: none;" v-else="item.Completed" v-on:click="tasks[key].Completed = true" viewBox="0 0 24 24" height="60px" width="60px" fill="none" stroke="red"
-            xmlns="http://www.w3.org/2000/svg">
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-            <g id="SVGRepo_iconCarrier">
-              <g id="Menu / Close_SM">
-                <path id="Vector" d="M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            <svg style="cursor: pointer; user-select: none;" v-else="item.Completed"
+              v-on:click="tasks[key].Completed = true" viewBox="0 0 24 24" height="60px" width="60px" fill="none"
+              stroke="red" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <g id="Menu / Close_SM">
+                  <path id="Vector" d="M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round"></path>
+                </g>
               </g>
-            </g>
-          </svg>
-          <svg style="cursor: pointer; user-select: none;" v-on:click="delete tasks[key]" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            </svg>
+            <svg style="cursor: pointer; user-select: none;" v-on:click="delete tasks[key]" width="30px" height="30px"
+              viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
               <g id="SVGRepo_iconCarrier">
@@ -76,9 +126,13 @@ export default {
                 </g>
               </g>
             </svg>
+          </div>
         </div>
+        <p style="word-wrap: break-word;">{{ item.Notes }}</p>
       </div>
-      <p style="word-wrap: break-word;">{{item.Notes}}</p>
     </div>
+    <button @click="modalShown = true;"
+        style="border: none; font-weight: bold; cursor: pointer; width: 400px; background-color: aliceblue; border-radius: 10px; padding: 10px; margin-top: 10px;">Add
+        Task</button>
   </div>
-</div></template>
+</template>
