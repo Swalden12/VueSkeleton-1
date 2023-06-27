@@ -90,7 +90,7 @@ function deleteTask(taskId){
                 </g>
               </g>
             </svg>
-            <svg style="cursor: pointer; user-select: none;" v-else="item.completed" v-on:click="toggleTaskCompletion(item)" viewBox="0 0 24 24" height="60px" width="60px" fill="none"
+            <svg style="cursor: pointer; user-select: none;" v-else v-on:click="toggleTaskCompletion(item)" viewBox="0 0 24 24" height="60px" width="60px" fill="none"
               stroke="red" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
