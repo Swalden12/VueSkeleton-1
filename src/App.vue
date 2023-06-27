@@ -24,17 +24,33 @@ watch(tasks, (newTasks) => {
 }, { deep: true });
 
 function makeid(length) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-    return result;
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  let counter = 0;
+  while (counter < length) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    counter += 1;
+  }
+  return result;
 }
-
+function ToggleTaskCompletion(taskId) {
+  tasks.value[taskId].Completed = !tasks.value[taskId].Completed;
+}
+function CreateTask(title, notes) {
+  ToggleModal();
+  tasks.value[makeid(16)] = {
+    "Title": title,
+    "Notes": notes,
+    "Completed": false
+  };
+}
+function ToggleModal(){
+  modalShown.value = !modalShown.value;
+}
+function DeleteTask(taskId){
+  delete tasks.value[taskId];
+}
 </script>
 
 <template>
@@ -47,15 +63,8 @@ function makeid(length) {
       <textarea v-model="newTaskNotes" placeholder="Task Notes"
         style="width: 300px; height: 400px; resize: none;"></textarea>
       <div style="display: flex; justify-content: space-between;">
-        <button @click="modalShown = false;">Cancel</button>
-        <button @click='modalShown = false; tasks[makeid(16)] = {
-          "Title": newTaskTitle,
-          "Notes": newTaskNotes,
-          "Completed": false
-        };
-        newTaskTitle = null;
-        newTaskNotes = null;
-        '>Save</button>
+        <button @click="ToggleModal()">Cancel</button>
+        <button @click='CreateTask(newTaskTitle,newTaskNotes);newTaskTitle=null;newTaskNotes=null;'>Save</button>
       </div>
     </div>
   </div>
@@ -70,9 +79,9 @@ function makeid(length) {
           <h3>{{ item.Title }}</h3>
           <div style="display: flex; align-items: center;">
             <p>Status: </p>
-            <svg style="cursor: pointer; user-select: none;" v-if="item.Completed"
-              v-on:click="tasks[key].Completed = false" viewBox="0 0 24 24" height="60px" width="60px" fill="none"
-              stroke="green" xmlns="http://www.w3.org/2000/svg">
+            <svg style="cursor: pointer; user-select: none;" v-if="item.Completed" v-on:click="ToggleTaskCompletion(key)"
+              viewBox="0 0 24 24" height="60px" width="60px" fill="none" stroke="green"
+              xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
               <g id="SVGRepo_iconCarrier">
@@ -83,7 +92,7 @@ function makeid(length) {
               </g>
             </svg>
             <svg style="cursor: pointer; user-select: none;" v-else="item.Completed"
-              v-on:click="tasks[key].Completed = true" viewBox="0 0 24 24" height="60px" width="60px" fill="none"
+              v-on:click="ToggleTaskCompletion(key)" viewBox="0 0 24 24" height="60px" width="60px" fill="none"
               stroke="red" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -94,7 +103,7 @@ function makeid(length) {
                 </g>
               </g>
             </svg>
-            <svg style="cursor: pointer; user-select: none;" v-on:click="delete tasks[key]" width="30px" height="30px"
+            <svg style="cursor: pointer; user-select: none;" v-on:click="DeleteTask(key)" width="30px" height="30px"
               viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -111,8 +120,8 @@ function makeid(length) {
         <p style="word-wrap: break-word;">{{ item.Notes }}</p>
       </div>
     </div>
-    <button @click="modalShown = true;"
-        style="border: none; font-weight: bold; cursor: pointer; width: 420px; background-color: aliceblue; border-radius: 10px; padding: 10px; margin-top: 10px;">Add
-        Task</button>
+    <button @click="ToggleModal()"
+      style="border: none; font-weight: bold; cursor: pointer; width: 420px; background-color: aliceblue; border-radius: 10px; padding: 10px; margin-top: 10px;">Add
+      Task</button>
   </div>
 </template>
