@@ -3,13 +3,13 @@
     <div class="todo">
       <h2>To-Do List</h2>
       <div class="row">
-        <input v-model="newTask" @keypress.enter="addTask" type="text" id="input-box" placeholder="Add your text">
+        <input v-model="newTask" @keypress.enter="addTask" type="text" placeholder="Add your text">
         <button @click="addTask">Add</button>
       </div>
-      <ul id="list-container">
+      <ul>
         <li v-for="(task, index) in tasks" :key="index" :class="{ checked: task.checked }" @click="toggleTask(task)">
           {{ task.text }}
-          <span @click.stop="removeTask(index)">✗</span>
+          <span @click.stop="removeTask(index)">x</span>
         </li>
       </ul>
     </div>
@@ -21,8 +21,11 @@ export default {
   data() {
     return {
       newTask: '',
-      tasks: JSON.parse(localStorage.getItem('data')) || []
+      tasks: []
     };
+  },
+  mounted() {
+    this.loadTasks();
   },
   methods: {
     addTask() {
@@ -32,18 +35,24 @@ export default {
       }
       this.tasks.push({ text: this.newTask, checked: false });
       this.newTask = '';
-      this.saveData();
+      this.saveTasks();
     },
     toggleTask(task) {
       task.checked = !task.checked;
-      this.saveData();
+      this.saveTasks();
     },
     removeTask(index) {
       this.tasks.splice(index, 1);
-      this.saveData();
+      this.saveTasks();
     },
-    saveData() {
+    saveTasks() {
       localStorage.setItem('data', JSON.stringify(this.tasks));
+    },
+    loadTasks() {
+      const savedTasks = localStorage.getItem('data');
+      if (savedTasks) {
+        this.tasks = JSON.parse(savedTasks);
+      }
     }
   }
 };
